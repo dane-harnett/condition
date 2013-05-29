@@ -78,7 +78,11 @@ c1.exec(myOb)
 condition.eval(myObj) // returns boolean
 
 
+var x = new Condition('isDefined,isNotEmptyString,in([1,2,3])');
 
+
+
+var y = new Condition('defined,notEmptyString,in(1,2,3)');
 
 
 

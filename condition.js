@@ -7,6 +7,9 @@
       isDefined: function(value) {
         return (typeof self.subject !== 'undefined') === value;
       },
+      isUndefined: function(value) {
+        return (typeof self.subject === 'undefined') === value;
+      },
       isFunction: function(value) {
         return (typeof self.subject === 'function') === value;
       },
@@ -36,15 +39,11 @@
   Condition.prototype.execMethod = function(key, value) {
     var self            = this,
         returnValue     = true,
-        isFunction      = new Condition({isFunction:true}),
-        isFalse         = new Condition({isFalse:true}),
         potentialMethod = self.methods[key];
     
-    isFunction.exec(potentialMethod)
-      .and(isFalse, potentialMethod(value))
-      .then(function(){
-        returnValue = false;
-      });
+    if (typeof potentialMethod === 'function' && potentialMethod(value) === false) {
+      returnValue = false;
+    }
     
     return returnValue;
   };
@@ -86,14 +85,14 @@
   Condition.prototype.then = function(func) {
     var self = this;
     if (self.result) {
-      func();
+      func(self.subject);
     }
     return self;
   };
   Condition.prototype.otherwise = function(func) {
     var self = this;
     if (!self.result) {
-      func();
+      func(self.subject);
     }
     return self;
   };
